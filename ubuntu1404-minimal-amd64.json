@@ -58,6 +58,7 @@
       "script/vagrant.sh",
       "script/sshd.sh",
       "script/vmtool.sh",
+      "script/minimize.sh",
       "script/cleanup.sh"
     ]
   }],
