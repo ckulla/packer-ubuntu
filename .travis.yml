@@ -8,4 +8,4 @@ install:
 before_script: 
 - export PATH=$PATH:$PWD/packer
 script: 
-- packer validate ubuntu1404-minimal-amd64.json 
+- packer validate *.json 
