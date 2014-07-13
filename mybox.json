@@ -1,0 +1,86 @@
+{
+  "variables": {
+    "auto_upgrade": "false", 
+    "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04-server-amd64.iso", 
+    "cm": "puppet", 
+    "cm_set_path": "", 
+    "iso_checksum": "4d94f6111b8fe47da94396180ce499d8c0bb44f3", 
+    "cm_version": "latest", 
+    "headless": "true", 
+    "cleanup_pause": ""
+  }, 
+  "provisioners": [
+    {
+      "environment_vars": [
+        "CM={{user `cm`}}", 
+        "CM_VERSION={{user `cm_version`}}", 
+        "CM_SET_PATH={{user `cm_set_path`}}", 
+        "CLEANUP_PAUSE={{user `cleanup_pause`}}", 
+        "AUTO_UPGRADE={{user `auto_upgrade`}}"
+      ], 
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'", 
+      "type": "shell", 
+      "scripts": [
+        "script/desktop.sh", 
+        "script/kernel.sh", 
+        "script/vagrant.sh", 
+        "script/sshd.sh", 
+        "script/vmtool.sh", 
+        "script/cleanup.sh"
+      ]
+    }
+  ], 
+  "builders": [
+    {
+      "vm_name": "ubuntu1404-minimal-amd64", 
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso", 
+      "iso_url": "{{ user `iso_url` }}", 
+      "disk_size": 40960, 
+      "guest_os_type": "Ubuntu_64", 
+      "iso_checksum": "{{ user `iso_checksum` }}", 
+      "ssh_username": "vagrant", 
+      "headless": "{{ user `headless` }}", 
+      "guest_additions_sha256": "4046f4dd2348031f41b0dff9277d313fa87397cca3ddb84612b17db20b20210a", 
+      "http_directory": "http", 
+      "iso_checksum_type": "sha1", 
+      "virtualbox_version_file": ".vbox_version", 
+      "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now", 
+      "ssh_password": "vagrant", 
+      "guest_additions_url": "https://www.virtualbox.org/download/testcase/VBoxGuestAdditions_4.3.13-94438.iso", 
+      "vboxmanage": [
+        [
+          "modifyvm", 
+          "{{.Name}}", 
+          "--memory", 
+          "4096"
+        ], 
+        [
+          "modifyvm", 
+          "{{.Name}}", 
+          "--cpus", 
+          "2"
+        ]
+      ], 
+      "ssh_wait_timeout": "10000s", 
+      "type": "virtualbox-iso", 
+      "boot_command": [
+        "<esc><esc><enter><wait>", 
+        "/install/vmlinuz noapic ", 
+        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed-ubuntu-minimal.cfg ", 
+        "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ", 
+        "hostname={{ .Name }} ", 
+        "fb=false debconf/frontend=noninteractive ", 
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ", 
+        "keyboard-configuration/variant=USA console-setup/ask_detect=false ", 
+        "initrd=/install/initrd.gz -- <enter>"
+      ]
+    }
+  ], 
+  "post-processors": [
+    {
+      "keep_input_artifact": false, 
+      "type": "vagrant", 
+      "output": "box/{{.Provider}}/ubuntu1404-desktop-amd64.box"
+    }
+  ]
+}
