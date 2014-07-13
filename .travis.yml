@@ -1,10 +1,11 @@
+# We need a language to set, use c for now
 language: c
 before_install:
-- sudo apt-get update
+#- sudo apt-get update
 install: 
-- sudo apt-get install virtualbox
+#- sudo apt-get install virtualbox
 - wget --no-check-certificate https://dl.bintray.com/mitchellh/packer/0.6.0_linux_amd64.zip && unzip -d packer 0.6.0_linux_amd64.zip
 before_script: 
 - export PATH=$PATH:$PWD/packer
 script: 
-- packer build ubuntu1404-minimal-amd64.json 
+- packer validate ubuntu1404-minimal-amd64.json 
