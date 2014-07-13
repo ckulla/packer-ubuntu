@@ -37,10 +37,10 @@
       "initrd=/install/initrd.gz -- <enter>"
     ],
     "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
-    "disk_size": 10140,
+    "disk_size": 40960,
     "vboxmanage": [
-      ["modifyvm", "{{.Name}}", "--memory", "2048"],
-      ["modifyvm", "{{.Name}}", "--cpus", "1"]
+      ["modifyvm", "{{.Name}}", "--memory", "4096"],
+      ["modifyvm", "{{.Name}}", "--cpus", "2"]
     ]
   }],
   "provisioners": [{
@@ -54,7 +54,7 @@
     ],
     "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
     "scripts": [
-      "script/desktop.sh"
+      "script/desktop.sh",
       "script/kernel.sh",
       "script/vagrant.sh",
       "script/sshd.sh",
