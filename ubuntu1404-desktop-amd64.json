@@ -65,6 +65,6 @@
   "post-processors": [{
     "type": "vagrant",
     "keep_input_artifact": false,
-    "output": "box/{{.Provider}}/ubuntu1404-minimal-amd64.box"
+    "output": "box/{{.Provider}}/ubuntu1404-desktop-amd64.box"
   }]
 }
